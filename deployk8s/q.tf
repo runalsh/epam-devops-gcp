@@ -169,28 +169,25 @@ module "gke" {
 }
 
 
-module "postgres" {
-  source = "github.com/gruntwork-io/terraform-google-sql.git//modules/cloud-sql?ref=v0.6.0"
-  project = var.project_id
-  region  = var.region
-  name    = var.db_name
-  db_name = var.db_name
+ resource "google_sql_database_instance" "my-database" {
+      name = "wandb"
+      database_version = "POSTGRES_13"
+      region = "${var.region}"
 
-  engine       = var.postgres_version
-  machine_type = var.machine_type_db	
-  
-  master_user_password = var.master_user_password
-  master_user_name     = var.master_user_name
-  
-  enable_public_internet_access = true
-  
-  authorized_networks = [
-    {
-      name  = "allow-all-inbound"
-      value = "0.0.0.0/0"
-    },
-  ]
-}	
+      settings {
+          tier = "db-f1-micro"
+          ip_configuration {
+            ipv4_enabled = true
+            authorized_networks {
+              name = "all"
+              value = "0.0.0.0/0"
+            }
+          }
+      }
+      # depends_on = [
+        # "google_project_services.vpc"
+      # ]
+    }
 
 output "master_public_ip" {
   description = "The public IPv4 address of the master instance"
