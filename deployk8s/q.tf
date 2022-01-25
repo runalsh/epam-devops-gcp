@@ -191,7 +191,7 @@ module "postgres" {
       value = "0.0.0.0/0"
     },
   ]
-	
+}	
 
 output "master_public_ip" {
   description = "The public IPv4 address of the master instance"
