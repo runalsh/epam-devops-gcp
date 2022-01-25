@@ -1,4 +1,3 @@
-
 provider "google" {
   credentials = var.credentials
   project     = var.project_id
@@ -171,7 +170,7 @@ module "gke" {
 
 
  resource "google_sql_database_instance" "database" {
-      name = "wandb"
+      name = "wandb_postgre"
       database_version = "POSTGRES_13"
       region = "${var.region}"
 
