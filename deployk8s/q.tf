@@ -1,3 +1,4 @@
+
 provider "google" {
   credentials = var.credentials
   project     = var.project_id
@@ -169,7 +170,7 @@ module "gke" {
 }
 
 
- resource "google_sql_database_instance" "database" {
+ resource "google_sql_database_instance" "my-database" {
       name = "wandb"
       database_version = "POSTGRES_13"
       region = "${var.region}"
@@ -191,10 +192,10 @@ module "gke" {
 
 resource "google_sql_user" "user" {
   name     = "postgres"
-  instance = "${google_sql_database_instance.database.name}"
+  instance = "${google_sql_database_instance.my-database.name}"
   password = "postgres"
 
   depends_on = [
-    "google_sql_database_instance.database"
+    "google_sql_database_instance.my-database"
   ]
 }
