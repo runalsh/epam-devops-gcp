@@ -1,5 +1,4 @@
-
-project_id = ${GCP_PROJECT}
+project_id = $TF_VAR_project
 credentials = "credentials.json"
 region     = "europe-west4"
 zones              = ["europe-west4-a", "europe-west4-b"]
@@ -13,6 +12,6 @@ service_account    = "sa-533@handy-station-339318.iam.gserviceaccount.com"
 imagename		= "epamapp"
 postgres_version = "POSTGRES_13_4"
 db_name = "wandb"
-master_user_password = ${GCP_PROJECT}
-master_user_name =  ${GCP_PROJECT}
+master_user_password = hui
+master_user_name =  hui
 machine_type_db = "db-f1-micro"
