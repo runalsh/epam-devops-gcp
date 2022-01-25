@@ -1,3 +1,4 @@
+
 provider "google" {
   credentials = var.credentials
   project     = var.project_id
@@ -176,7 +177,6 @@ module "gke" {
 
       settings {
           tier = "db-f1-micro"
-          deletion_protection = false
           ip_configuration {
             ipv4_enabled = true
             authorized_networks {
@@ -185,6 +185,7 @@ module "gke" {
             }
           }
       }
+      deletion_protection = false
       # depends_on = [
         # "google_project_services.vpc"
       # ]
