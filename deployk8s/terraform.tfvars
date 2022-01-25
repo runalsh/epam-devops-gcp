@@ -1,7 +1,7 @@
 project_id = "handy-station-339318"
 credentials = "credentials.json"
-region     = "europe-west1"
-zones              = ["europe-west1-a", "europe-west1-b"]
+region     = "europe-west4"
+zones              = ["europe-west4-a", "europe-west4-b"]
 name               = "epam-py-cluster"
 machine_type       = "e2-small"
 initial_node_count = 1
