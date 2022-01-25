@@ -169,7 +169,7 @@ module "gke" {
 }
 
 
- resource "google_sql_database_instance" "my-database" {
+ resource "google_sql_database_instance" "database" {
       name = "wandb"
       database_version = "POSTGRES_13"
       region = "${var.region}"
@@ -189,4 +189,12 @@ module "gke" {
       # ]
     }
 
-	
+resource "google_sql_user" "user" {
+  name     = "postgres"
+  instance = "${google_sql_database_instance.database.name}"
+  password = "postgres"
+
+  depends_on = [
+    "google_sql_database_instance.database"
+  ]
+}
