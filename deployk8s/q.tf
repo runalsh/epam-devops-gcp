@@ -123,7 +123,7 @@ resource "google_storage_bucket" "state-bucket" {
 
 terraform {
   backend "gcs" {
-    bucket          = var.project_id
+    bucket          = "handy-station-339318"
     prefix          = "/terraform.tfstate"
     credentials     = "credentials.json"
   }
