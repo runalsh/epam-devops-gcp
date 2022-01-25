@@ -183,7 +183,6 @@ module "postgres" {
   master_user_name     = var.master_user_name
   
   enable_public_internet_access = true
-  deletion_protection           = false
   
   authorized_networks = [
     {
