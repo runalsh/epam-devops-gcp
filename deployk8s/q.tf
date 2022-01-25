@@ -123,7 +123,7 @@ resource "google_storage_bucket" "state-bucket" {
 
 terraform {
   backend "gcs" {
-    bucket          = "handy-station-339318"
+    bucket          = var.project_id
     prefix          = "/terraform.tfstate"
     credentials     = "credentials.json"
   }
@@ -173,7 +173,7 @@ module "postgres" {
   source = "github.com/gruntwork-io/terraform-google-sql.git//modules/cloud-sql?ref=v0.2.0"
   project = var.project
   region  = var.region
-  name    = var.db_name-instance
+  name    = var.db_name
   db_name = var.db_name
 
   engine       = var.postgres_version

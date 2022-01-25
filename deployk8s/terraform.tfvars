@@ -1,4 +1,4 @@
-project_id = "${var.TF_VAR_project}"
+project_id = "handy-station-339318"
 credentials = "credentials.json"
 region     = "europe-west4"
 zones              = ["europe-west4-a", "europe-west4-b"]
@@ -9,7 +9,6 @@ min_count          = 1
 max_count          = 2
 disk_size_gb       = 10
 service_account    = "sa-533@handy-station-339318.iam.gserviceaccount.com"
-imagename		= "epamapp"
 postgres_version = "POSTGRES_13_4"
 db_name = "wandb"
 master_user_password = "hui"
