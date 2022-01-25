@@ -25,6 +25,7 @@ jobs:
     name: Terraform
     env:
       ACTION: Deploy infrastructure with Terraform
+      TF_VAR_project: ${{ secrets.GCP_PROJECT }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
