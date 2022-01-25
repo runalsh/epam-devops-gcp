@@ -139,6 +139,7 @@ jobs:
 
   dockerimagepush:
     # needs: pylint
+    needs: initkube
     name: Setup, build, publish, and deploy
     runs-on: ubuntu-latest
     env:
