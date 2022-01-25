@@ -62,6 +62,34 @@ variable "initial_node_count" {
   description = "The number of nodes to create in this cluster's default node pool."
 }
 
+variable "postgres_version" {
+  description = "The engine version of the database, e.g. `POSTGRES_13_4`. See https://cloud.google.com/sql/docs/features for supported versions."
+  type        = string
+  default     = "POSTGRES_13_4"
+}
+
+variable "machine_type_db" {
+  description = "The machine type to use, see https://cloud.google.com/sql/pricing for more details"
+  type        = string
+  default     = "db-f1-micro"
+}
+
+variable "db_name" {
+  description = "Name for the db"
+  type        = string
+  default     = "default"
+}
+
+variable "master_user_name" {
+  description = "The username part for the default user credentials, i.e. 'master_user_name'@'master_user_host' IDENTIFIED BY 'master_user_password'. This should typically be set as the environment variable TF_VAR_master_user_name so you don't check it into source control."
+  type        = string
+}
+
+variable "master_user_password" {
+  description = "The password part for the default user credentials, i.e. 'master_user_name'@'master_user_host' IDENTIFIED BY 'master_user_password'. This should typically be set as the environment variable TF_VAR_master_user_password so you don't check it into source control."
+  type        = string
+}
+
 
 resource "google_storage_bucket" "state-bucket" {
   name     = var.project_id
@@ -139,3 +167,47 @@ module "gke" {
     }
   ]
 }
+
+
+module "postgres" {
+  source = "github.com/gruntwork-io/terraform-google-sql.git//modules/cloud-sql?ref=v0.2.0"
+  project = var.project
+  region  = var.region
+  name    = var.db_name-instance
+  db_name = var.db_name
+
+  engine       = var.postgres_version
+  machine_type = var.machine_type_db	
+  
+  master_user_password = var.master_user_password
+  master_user_name     = var.master_user_name
+  
+  enable_public_internet_access = true
+  deletion_protection           = false
+  
+  authorized_networks = [
+    {
+      name  = "allow-all-inbound"
+      value = "0.0.0.0/0"
+    },
+  ]
+	
+
+output "master_public_ip" {
+  description = "The public IPv4 address of the master instance"
+  value       = module.postgres.master_public_ip_address
+}
+
+output "db_name" {
+  description = "Name of the default database"
+  value       = module.postgres.db_name
+}
+
+output "db" {
+  description = "Self link to the default database"
+  value       = module.postgres.db
+}
+	
+	
+	
+	
