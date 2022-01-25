@@ -1,0 +1,11 @@
+project_id = "handy-station-339318"
+credentials = "credentials.json"
+region     = "europe-west1"
+zones              = ["europe-west1-a", "europe-west1-b"]
+name               = "epam-py-cluster"
+machine_type       = "e2-small"
+initial_node_count = 1
+min_count          = 1
+max_count          = 2
+disk_size_gb       = 10
+service_account    = "sa-533@handy-station-339318.iam.gserviceaccount.com"
