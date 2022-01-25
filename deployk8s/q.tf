@@ -1,4 +1,3 @@
-
 provider "google" {
   credentials = var.credentials
   project     = var.project_id
@@ -170,13 +169,14 @@ module "gke" {
 }
 
 
- resource "google_sql_database_instance" "my-database" {
+ resource "google_sql_database_instance" "database" {
       name = "wandb"
       database_version = "POSTGRES_13"
       region = "${var.region}"
 
       settings {
           tier = "db-f1-micro"
+          deletion_protection = false
           ip_configuration {
             ipv4_enabled = true
             authorized_networks {
@@ -192,10 +192,10 @@ module "gke" {
 
 resource "google_sql_user" "user" {
   name     = "postgres"
-  instance = "${google_sql_database_instance.my-database.name}"
+  instance = "${google_sql_database_instance.database.name}"
   password = "postgres"
 
   depends_on = [
-    "google_sql_database_instance.my-database"
+    "google_sql_database_instance.database"
   ]
 }
