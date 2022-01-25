@@ -189,21 +189,4 @@ module "gke" {
       # ]
     }
 
-output "master_public_ip" {
-  description = "The public IPv4 address of the master instance"
-  value       = module.postgres.master_public_ip_address
-}
-
-output "db_name" {
-  description = "Name of the default database"
-  value       = module.postgres.db_name
-}
-
-output "db" {
-  description = "Self link to the default database"
-  value       = module.postgres.db
-}
-	
-	
-	
 	
