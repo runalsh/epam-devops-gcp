@@ -170,7 +170,7 @@ module "gke" {
 
 
 module "postgres" {
-  source = "github.com/gruntwork-io/terraform-google-sql.git//modules/cloud-sql?ref=v0.2.0"
+  source = "github.com/gruntwork-io/terraform-google-sql.git//modules/cloud-sql?ref=v0.6.0"
   project = var.project_id
   region  = var.region
   name    = var.db_name
