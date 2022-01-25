@@ -1,4 +1,4 @@
-project_id = $TF_VAR_project
+project_id = ${var.TF_VAR_project}
 credentials = "credentials.json"
 region     = "europe-west4"
 zones              = ["europe-west4-a", "europe-west4-b"]
