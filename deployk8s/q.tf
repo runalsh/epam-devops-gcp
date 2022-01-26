@@ -170,12 +170,12 @@ module "gke" {
 
 
  resource "google_sql_database_instance" "database" {
-      name = "wandb_postgre"
+      name = "${var.db_name}"
       database_version = "POSTGRES_13"
       region = "${var.region}"
 
       settings {
-          tier = "db-f1-micro"
+          tier = var.machine_type
           ip_configuration {
             ipv4_enabled = true
             authorized_networks {
