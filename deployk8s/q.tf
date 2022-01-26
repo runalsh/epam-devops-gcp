@@ -190,17 +190,3 @@ resource "google_sql_user" "user" {
   ]
 }
 
-output "master_public_ip_address" {
-  description = "The public IPv4 address of the master instance."
-  value       = google_sql_database_instance.master.public_ip_address
-}
-
-output "db" {
-  description = "Self link to the default database"
-  value       = google_sql_database.default.self_link
-}
-
-output "db_name" {
-  description = "Name of the default database"
-  value       = google_sql_database.default.name
-}
