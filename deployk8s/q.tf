@@ -65,7 +65,7 @@ variable "initial_node_count" {
 variable "postgres_version" {
   description = "The engine version of the database, e.g. `POSTGRES_13_4`. See https://cloud.google.com/sql/docs/features for supported versions."
   type        = string
-  default     = "POSTGRES_13_4"
+  default     = "POSTGRES_13"
 }
 
 variable "machine_type_db" {
@@ -170,9 +170,9 @@ module "gke" {
 
 
  resource "google_sql_database_instance" "database" {
-      name = "${var.db_name}"
-      database_version = "POSTGRES_13"
-      region = "${var.region}"
+      name = var.db_name
+      database_version = var.postgres_version
+      region = var.region
 
       settings {
           tier = var.machine_type
