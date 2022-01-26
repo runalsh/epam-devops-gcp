@@ -175,7 +175,7 @@ module "gke" {
       region = var.region
 
       settings {
-          tier = var.machine_type
+          tier = var.machine_type_db
           ip_configuration {
             ipv4_enabled = true
             authorized_networks {
