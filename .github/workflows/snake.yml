@@ -15,7 +15,6 @@ env:
   GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
   IMAGE: ${{ secrets.GCP_IMAGE }}
   CLUSTERNAME: ${{ secrets.GKE_CLUSTERNAME}}
-  TF_VAR_project: ${{ secrets.GCP_PROJECT }}
 jobs:
   initkube:
     defaults:
@@ -25,7 +24,6 @@ jobs:
     name: Terraform
     env:
       ACTION: Deploy infrastructure with Terraform
-      TF_VAR_project: ${{ secrets.GCP_PROJECT }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
