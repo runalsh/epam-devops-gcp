@@ -80,6 +80,16 @@ variable "db_name" {
   default     = "default"
 }
 
+variable "dbuser" {
+  description = "Name for the db user"
+  type        = string
+}
+
+variable "dbpasswd" {
+  description = "password  for the db"
+  type        = string
+}
+
 
 resource "google_storage_bucket" "state-bucket" {
   name     = var.project_id
@@ -92,7 +102,7 @@ resource "google_storage_bucket" "state-bucket" {
 
   lifecycle_rule {
     condition {
-      age = 1
+      age = 4
     }
     action {
       type = "Delete"
@@ -119,10 +129,6 @@ terraform {
   }
 }
 
-output "bucket" {
-    value = "${google_storage_bucket.state-bucket.name}"
-    description = "Terraform backend storage bucket"
-}
 
 module "gke" {
   source                     = "terraform-google-modules/kubernetes-engine/google"
@@ -163,17 +169,21 @@ module "gke" {
       name = var.db_name
       database_version = var.postgres_version
       region = var.region
-
+      depends_on = [
+        "google_service_networking_connection.private_vpc_connection"
+        ]
       settings {
           tier = var.machine_type_db
           ip_configuration {
-            ipv4_enabled = true
-            authorized_networks {
-              name = "all"
-              value = "0.0.0.0/0"
+            # ipv4_enabled = true
+            # authorized_networks {
+              # name = "all"
+              # value = "0.0.0.0/0"
+              
+            ipv4_enabled = "false"
+            private_network = "${google_compute_network.private_network.self_link}"
             }
           }
-      }
       deletion_protection = false
       # depends_on = [
         # "google_project_services.vpc"
@@ -181,12 +191,46 @@ module "gke" {
     }
 
 resource "google_sql_user" "user" {
-  name     = "postgres"
+  name     = var.dbuser
   instance = "${google_sql_database_instance.database.name}"
-  password = "postgres"
+  password = var.dbpasswd
 
   depends_on = [
     "google_sql_database_instance.database"
   ]
 }
 
+resource "google_sql_database" "database" {
+  name     = "pydb"
+  instance = "${google_sql_database_instance.database.name}"
+}
+
+resource "google_compute_network" "private_network" {
+  provider = "google"
+  name       = "default"
+}
+
+resource "google_compute_global_address" "private_ip_address" {
+  provider = "google"
+
+  name          = "private-ip-address"
+  purpose       = "VPC_PEERING"
+  address_type = "INTERNAL"
+  prefix_length = 16
+  network       = "${google_compute_network.private_network.self_link}"
+}
+
+resource "google_service_networking_connection" "private_vpc_connection" {
+  provider = "google"
+
+  network       = "${google_compute_network.private_network.self_link}"
+  service       = "servicenetworking.googleapis.com"
+  reserved_peering_ranges = ["${google_compute_global_address.private_ip_address.name}"]
+}
+
+
+
+
+output "private_ip_address" {
+    value = "${ google_sql_database_instance.database.private_ip_address }"
+}
