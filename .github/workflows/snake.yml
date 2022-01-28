@@ -1,4 +1,3 @@
-
 on:
   push:
     branches: [ main ]
@@ -17,49 +16,49 @@ env:
   IMAGE: ${{ secrets.GCP_IMAGE }}
   CLUSTERNAME: ${{ secrets.GKE_CLUSTERNAME }}
 jobs:
-  # initkube:
-    # defaults:
-      # run:
-        # working-directory: deployk8s
-        # shell: bash
-    # name: Terraform
-    # env:
-      # ACTION: Deploy infrastructure with Terraform
-    # runs-on: ubuntu-latest
-    # steps:
-      # - name: Checkout
-        # uses: actions/checkout@v2
+  initkube:
+    defaults:
+      run:
+        working-directory: deployk8s
+        shell: bash
+    name: Terraform
+    env:
+      ACTION: Deploy infrastructure with Terraform
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
         
-      # - name: Env GCP creds to Terraform
-        # run: |
-              # echo "$GCP_CREDENTIALS" > credentials.json
-              # ls -la
-# # дикая дичь, подумать почему пропаганда не работает 
-# # TODO
-      # - name: Setup Terraform
-        # uses: hashicorp/setup-terraform@v1
+      - name: Env GCP creds to Terraform
+        run: |
+              echo "$GCP_CREDENTIALS" > credentials.json
+              ls -la
+# дикая дичь, подумать почему пропаганда не работает 
+# TODO
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
 
-      # - name: Terraform Init
-        # run: terraform init
+      - name: Terraform Init
+        run: terraform init
         
-      # - name: Terraform Format
-        # run: terraform fmt -check
-        # continue-on-error: true
+      - name: Terraform Format
+        run: terraform fmt -check
+        continue-on-error: true
 
-      # - name: Terraform Plan
-        # run: terraform plan -lock=false
+      - name: Terraform Plan
+        run: terraform plan -lock=false
 
-      # - name: Terraform Apply
-    # #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        # run: terraform apply -lock=false -auto-approve
-        # continue-on-error: true
+      - name: Terraform Apply
+    #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -lock=false -auto-approve
+        continue-on-error: true
         
     
-      # # - run: terraform output -raw private_ip_address
-      # # - run: sql_ip=$(terraform output private_ip_address)
-      # # - run: echo $sql_ip >> ../ip.txt
-      # # - run: ls -la
-      # # - run: cat ../ip.txt
+      # - run: terraform output -raw private_ip_address
+      # - run: sql_ip=$(terraform output private_ip_address)
+      # - run: echo $sql_ip >> ../ip.txt
+      # - run: ls -la
+      # - run: cat ../ip.txt
         
   pytest:
     # needs: initkube
@@ -145,77 +144,77 @@ jobs:
 
  # #======================== MAY BE GOSEC? ===================================
 
-  # dockerimagepush:
-    # # needs: pylint
-    # needs: initkube
-    # name: Setup, build, publish, and deploy
-    # runs-on: ubuntu-latest
-    # env:
-      # ACTION: Build, push Docker image to GCR
-    # steps:
-    # - name: Checkout
-      # uses: actions/checkout@v2
+  dockerimagepush:
+    # needs: pylint
+    needs: initkube
+    name: Setup, build, publish, and deploy
+    runs-on: ubuntu-latest
+    env:
+      ACTION: Build, push Docker image to GCR
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
 
-    # - uses: google-github-actions/setup-gcloud@v0.2.0
+    - uses: google-github-actions/setup-gcloud@v0.2.0
+      with:
+        service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+        project_id: ${{ secrets.GCP_PROJECT }}
+
+    - run: |-
+        gcloud --quiet auth configure-docker
+
+    # - uses: google-github-actions/get-gke-credentials@v0.2.1
       # with:
-        # service_account_key: ${{ secrets.GCP_CREDENTIALS }}
-        # project_id: ${{ secrets.GCP_PROJECT }}
+        # cluster_name: pypypypy-cluster # ${{ env.GKE_CLUSTER }}
+        # location: europe-central2-a # ${{ env.GKE_ZONE }}
+        # credentials: ${{ secrets.GCP_CREDENTIALS }}
 
-    # - run: |-
-        # gcloud --quiet auth configure-docker
-
-    # # - uses: google-github-actions/get-gke-credentials@v0.2.1
-      # # with:
-        # # cluster_name: pypypypy-cluster # ${{ env.GKE_CLUSTER }}
-        # # location: europe-central2-a # ${{ env.GKE_ZONE }}
-        # # credentials: ${{ secrets.GCP_CREDENTIALS }}
-
-    # # - run: ls -la && cat ip.txt
+    # - run: ls -la && cat ip.txt
     
-    # - name: Build
-      # run: |-
-        # docker build \
-          # --tag "gcr.io/${{ secrets.GCP_PROJECT }}/$IMAGE:latest" \
-          # --build-arg GITHUB_SHA="$GITHUB_SHA" \
-          # --build-arg GITHUB_REF="$GITHUB_REF" \
-          # .
-    # - name: Publish and Env GCP proj to Terraform
-      # run: |-
-        # docker push "gcr.io/${{ secrets.GCP_PROJECT }}/$IMAGE:latest"
-        # docker image prune --all --filter "until=72h"
+    - name: Build
+      run: |-
+        docker build \
+          --tag "gcr.io/${{ secrets.GCP_PROJECT }}/$IMAGE:latest" \
+          --build-arg GITHUB_SHA="$GITHUB_SHA" \
+          --build-arg GITHUB_REF="$GITHUB_REF" \
+          .
+    - name: Publish and Env GCP proj to Terraform
+      run: |-
+        docker push "gcr.io/${{ secrets.GCP_PROJECT }}/$IMAGE:latest"
+        docker image prune --all --filter "until=72h"
 
-  # deploykube:
-    # name: Deploy to GCP
-    # runs-on: ubuntu-latest
-    # env:
-      # ACTION: Deploy GKE and pull image
-    # defaults:
-      # run:
-        # working-directory: deployk8s
-        # shell: bash 
-    # needs: dockerimagepush
-    # steps:
-      # - name: checkout repo
-        # uses: actions/checkout@v2
+  deploykube:
+    name: Deploy to GCP
+    runs-on: ubuntu-latest
+    env:
+      ACTION: Deploy GKE and pull image
+    defaults:
+      run:
+        working-directory: deployk8s
+        shell: bash 
+    needs: dockerimagepush
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v2
 
-      # # Setup gcloud CLI
-      # - name: setup gcloud CLI
-        # uses: google-github-actions/setup-gcloud@v0
-        # with:
-          # project_id: ${{ secrets.GCP_PROJECT }}
-          # # this is the json key of the service account created on the project
-          # service_account_key: ${{ secrets.GCP_CREDENTIALS }}  
-          # export_default_credentials: true
+      # Setup gcloud CLI
+      - name: setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT }}
+          # this is the json key of the service account created on the project
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}  
+          export_default_credentials: true
 
-      # # Deploy the app using kubernetes (deploy.yml)
-      # - name: Deploy
-        # run: |
-          # gcloud config set compute/region ${{ secrets.GKE_ZONE }} 
-          # # gcloud config set compute/zone ${{ secrets.GKE_ZONE }}a
-          # gcloud container clusters get-credentials $CLUSTERNAME --region ${{secrets.GKE_ZONE}}
-          # envsubst < kube.yml
-          # envsubst < kube.yml | kubectl apply -f -
-          # kubectl rollout restart deployment/$IMAGE
-          # kubectl rollout status -w deployment/$IMAGE
-          # kubectl get all
+      # Deploy the app using kubernetes (deploy.yml)
+      - name: Deploy
+        run: |
+          gcloud config set compute/region ${{ secrets.GKE_ZONE }} 
+          # gcloud config set compute/zone ${{ secrets.GKE_ZONE }}a
+          gcloud container clusters get-credentials $CLUSTERNAME --region ${{secrets.GKE_ZONE}}
+          envsubst < kube.yml
+          envsubst < kube.yml | kubectl apply -f -
+          kubectl rollout restart deployment/$IMAGE
+          kubectl rollout status -w deployment/$IMAGE
+          kubectl get all
  
