@@ -136,8 +136,8 @@ module "gke" {
   region                     = var.region
   zones                      = var.zones
   name                       = var.name
-  network                    = "default"
-  subnetwork                 = "europe-west4"
+  network                    = "VPC"
+  subnetwork                 = "subnetVPC"
   ip_range_pods              = ""
   ip_range_services          = ""
   http_load_balancing        = false
