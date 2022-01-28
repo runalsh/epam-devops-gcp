@@ -55,10 +55,11 @@ jobs:
         continue-on-error: true
         
     
-      - run: terraform output -raw private_ip_address
-      - run: sql_ip=$(terraform output private_ip_address)
-      - run: echo $sql_ip >> ../ip.txt
-      - run: ls -la && cat ../ip.txt
+      # - run: terraform output -raw private_ip_address
+      # - run: sql_ip=$(terraform output private_ip_address)
+      # - run: echo $sql_ip >> ../ip.txt
+      # - run: ls -la
+      # - run: cat ../ip.txt
         
   # pytest:
     # needs: initkube
@@ -169,7 +170,7 @@ jobs:
         # location: europe-central2-a # ${{ env.GKE_ZONE }}
         # credentials: ${{ secrets.GCP_CREDENTIALS }}
 
-    - run: ls -la && cat ip.txt
+    # - run: ls -la && cat ip.txt
     
     - name: Build
       run: |-
