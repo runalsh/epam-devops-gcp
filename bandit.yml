@@ -1,2 +1,2 @@
 assert_used:
-  skips: ['*_test.py', 'test_*.py', 'B104', 'B201', 'B608']
+  skips: ['*_test.py', 'test_*.py']
