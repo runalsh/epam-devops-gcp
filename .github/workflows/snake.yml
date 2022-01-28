@@ -62,7 +62,7 @@ jobs:
       # # - run: cat ../ip.txt
         
   pytest:
-    needs: initkube
+    # needs: initkube
     runs-on: ubuntu-latest
     env:
       ACTION: Test Pytest
