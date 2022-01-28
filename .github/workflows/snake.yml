@@ -56,7 +56,7 @@ jobs:
         
     
       - run: terraform output -raw private_ip_address
-      - run: sql_ip = $(terraform output private_ip_address)
+      - run: sql_ip=$(terraform output private_ip_address)
       - run: echo $sql_ip >> ../ip.txt
       - run: ls -la && cat ../ip.txt
         
