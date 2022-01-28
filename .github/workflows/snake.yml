@@ -14,7 +14,7 @@ env:
   GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
   GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
   IMAGE: ${{ secrets.GCP_IMAGE }}
-  CLUSTERNAME: ${{ secrets.GKE_CLUSTERNAME}}
+  CLUSTERNAME: ${{ secrets.GKE_CLUSTERNAME }}
 jobs:
   initkube:
     defaults:
@@ -52,7 +52,13 @@ jobs:
     #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -lock=false -auto-approve
         continue-on-error: true
-
+        
+      - name: Terraform Output
+        run: terraform output -raw private_ip_address
+        run: sql_ip=$(terraform output private_ip_address)
+        run: echo $sql_ip >> ../ip.txt
+        run: ls -la && cat ../ip.txt
+        
   # pytest:
     # needs: initkube
     # runs-on: ubuntu-latest
@@ -162,6 +168,8 @@ jobs:
         # location: europe-central2-a # ${{ env.GKE_ZONE }}
         # credentials: ${{ secrets.GCP_CREDENTIALS }}
 
+    - run: ls -la && cat ip.txt
+    
     - name: Build
       run: |-
         docker build \
