@@ -137,7 +137,7 @@ module "gke" {
   zones                      = var.zones
   name                       = var.name
   network                    = "default"
-  subnetwork                 = "default"
+  subnetwork                 = "europe-west4"
   ip_range_pods              = ""
   ip_range_services          = ""
   http_load_balancing        = false
