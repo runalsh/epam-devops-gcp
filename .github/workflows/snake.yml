@@ -1,3 +1,4 @@
+
 on:
   push:
     branches: [ main ]
@@ -16,49 +17,49 @@ env:
   IMAGE: ${{ secrets.GCP_IMAGE }}
   CLUSTERNAME: ${{ secrets.GKE_CLUSTERNAME }}
 jobs:
-  initkube:
-    defaults:
-      run:
-        working-directory: deployk8s
-        shell: bash
-    name: Terraform
-    env:
-      ACTION: Deploy infrastructure with Terraform
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # initkube:
+    # defaults:
+      # run:
+        # working-directory: deployk8s
+        # shell: bash
+    # name: Terraform
+    # env:
+      # ACTION: Deploy infrastructure with Terraform
+    # runs-on: ubuntu-latest
+    # steps:
+      # - name: Checkout
+        # uses: actions/checkout@v2
         
-      - name: Env GCP creds to Terraform
-        run: |
-              echo "$GCP_CREDENTIALS" > credentials.json
-              ls -la
-# дикая дичь, подумать почему пропаганда не работает 
-# TODO
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
+      # - name: Env GCP creds to Terraform
+        # run: |
+              # echo "$GCP_CREDENTIALS" > credentials.json
+              # ls -la
+# # дикая дичь, подумать почему пропаганда не работает 
+# # TODO
+      # - name: Setup Terraform
+        # uses: hashicorp/setup-terraform@v1
 
-      - name: Terraform Init
-        run: terraform init
+      # - name: Terraform Init
+        # run: terraform init
         
-      - name: Terraform Format
-        run: terraform fmt -check
-        continue-on-error: true
+      # - name: Terraform Format
+        # run: terraform fmt -check
+        # continue-on-error: true
 
-      - name: Terraform Plan
-        run: terraform plan -lock=false
+      # - name: Terraform Plan
+        # run: terraform plan -lock=false
 
-      - name: Terraform Apply
-    #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -lock=false -auto-approve
-        continue-on-error: true
+      # - name: Terraform Apply
+    # #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        # run: terraform apply -lock=false -auto-approve
+        # continue-on-error: true
         
     
-      # - run: terraform output -raw private_ip_address
-      # - run: sql_ip=$(terraform output private_ip_address)
-      # - run: echo $sql_ip >> ../ip.txt
-      # - run: ls -la
-      # - run: cat ../ip.txt
+      # # - run: terraform output -raw private_ip_address
+      # # - run: sql_ip=$(terraform output private_ip_address)
+      # # - run: echo $sql_ip >> ../ip.txt
+      # # - run: ls -la
+      # # - run: cat ../ip.txt
         
   pytest:
     needs: initkube
@@ -98,7 +99,7 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: analyze source code with bandit
       run: |
-        bandit -c ./bandit.yml -r .
+        bandit -c bandit.yml -r .
  
     
       # # sonarcloud:
