@@ -20,6 +20,8 @@ current_time = currtime.strftime("%H:%M:%S")
 
 # db={"user": os.getenv('DB_USER'),"password": os.getenv('DB_PASSWORD'),"host": os.getenv('DB_HOST'),"port": "5432","database": os.getenv('DB_NAME')}
 db= {"user": "pypostgres","password": "pypostgres","host": "10.114.0.3","port": "5432","database": "pydb"}
+# некрасиво с хостом, надо так: terraform output > var > host 
+# TODO
 
 
 def storedata():
@@ -93,7 +95,8 @@ def tablewipe():
     # cursor.close()
     # # connection.commit()
     # connection.close()
-
+    
+# убрал к херам, мб понадобится для дебага
 
 
 
@@ -156,6 +159,8 @@ def showmeweather():
     connection.close()
     # return "indexhtml ready at"+current_time
     return render_template('shooooooooooooow.html', text=data)
+
+# TODO ДОБАВИТЬ STRESS в базу
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
