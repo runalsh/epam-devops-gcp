@@ -25,7 +25,6 @@ db= {"user": "pypostgres","password": "pypostgres","host": "10.70.0.3","port": "
 # некрасиво с хостом, надо так: terraform output > var > host 
 # TODO
 
-
 def storedata():
     connection = psycopg2.connect(**db)
     connection.autocommit = True
