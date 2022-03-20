@@ -18,6 +18,7 @@ import datetime
 from psutil import cpu_percent,getloadavg
 
 STRESSTIME=5
+host=getenv('HOSTNAME')
         
 load_dotenv()
 
