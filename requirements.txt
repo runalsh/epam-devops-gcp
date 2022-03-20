@@ -1,4 +1,4 @@
 Flask
-psycopg2_binary
+psycopg2
 requests
 python-dotenv
