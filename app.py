@@ -3,6 +3,7 @@
 import psycopg2
 # import urllib.request as req
 import os
+from dotenv import load_dotenv
 import sys
 import json
 import requests
@@ -15,19 +16,21 @@ from flask import Flask,request,render_template
 # from prettytable import from_db_cursor
 import datetime
 
+load_dotenv()
+
 currtime = datetime.datetime.now()
 current_time = currtime.strftime("%H:%M:%S")
 
 
 # вариант под docker compose
-db= {"user": "pypostgres","password": "pypostgres","host": "10.70.0.3","port": "5432","database": "pydb"}
-#db = {
-#      "user": os.getenv('DB_USER'),
-#      "password": os.getenv('DB_PASSWORD'),
-#      "host": os.getenv('DB_HOST'),
-#      "port": "5432",
-#      "database": os.getenv('DB_NAME')
-#}
+# db= {"user": "pypostgres","password": "pypostgres","host": "10.70.0.3","port": "5432","database": "pydb"}
+db = {
+      "user": os.getenv('DB_USER'),
+      "password": os.getenv('DB_PASSWORD'),
+      "host": os.getenv('DB_HOST'),
+      "port": "5432",
+      "database": os.getenv('DB_NAME')
+}
 # некрасиво с хостом, надо так: terraform output > var > host 
 # TODO
 
