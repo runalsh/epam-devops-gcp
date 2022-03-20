@@ -6,7 +6,6 @@ RUN mkdir /app
 WORKDIR /app
 COPY requirements.txt /app
 RUN pip install --no-cache-dir --prefix=/app -r requirements.txt
-RUN pip install --no-cache-dir --prefix=/app pystress
 FROM base as layer2
 RUN mkdir /app
 WORKDIR /app
