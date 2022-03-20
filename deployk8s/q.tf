@@ -3,8 +3,6 @@ provider "google" {
   project     = var.project_id
   region      = var.region
   # version = "~> 4.40.0"
-
-
 }
 
 variable "credentials" {
