@@ -132,6 +132,11 @@ def cleandata():
     # allweather()
     # return "indexhtml ready at"+current_time
 
+@app.route('/stress/<int:seconds>')
+def stress(seconds):
+      pystress(seconds, 1)
+      return Response('shake me')
+
 @app.route('/')    
 def homepage():
     return render_template('fill.html')
