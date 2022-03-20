@@ -215,7 +215,7 @@ resource "google_compute_global_address" "private_ip_address" {
   purpose       = "VPC_PEERING"
   address = "10.27.0.3"
   address_type = "INTERNAL"
-  prefix_length = 16
+  prefix_length = 32
   network       = "${google_compute_network.private_network.self_link}"
 }
 
