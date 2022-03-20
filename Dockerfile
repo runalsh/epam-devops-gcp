@@ -9,6 +9,7 @@ RUN pip install --no-cache-dir --prefix=/app -r requirements.txt
 FROM base as layer2
 RUN mkdir /app
 WORKDIR /app
+COPY .env /app
 ADD app.py /app/app.py
 FROM base
 RUN mkdir /app
