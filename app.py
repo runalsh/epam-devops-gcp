@@ -15,7 +15,10 @@ from flask import Flask,request,render_template
 # from prettytable import PrettyTable
 # from prettytable import from_db_cursor
 import datetime
+from psutil import cpu_percent,getloadavg
 
+STRESSTIME=5
+        
 load_dotenv()
 
 currtime = datetime.datetime.now()
@@ -108,7 +111,18 @@ def tablewipe():
     
 # убрал к херам, мб понадобится для дебага
 
+def cpustress(seconds):
+    assert type(seconds) == type(1) and seconds < 120
+    start=time()
+    while True:
+        a=1
+        while a < 1000:
+            x=a*a
+            x=1.3333*x/(a+7.7777)
+            a+=1
 
+        if (time() - start) > seconds:
+            break
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -132,10 +146,22 @@ def cleandata():
     # allweather()
     # return "indexhtml ready at"+current_time
 
-@app.route('/stress/<int:seconds>')
-def stress(seconds):
-      pystress(seconds, 1)
-      return Response('shake me')
+#@app.route('/stress/<int:seconds>')
+#def stress(seconds):
+#      pystress(seconds, 1)
+#      return Response('shake me')
+
+@app.route("/stress")
+def stress():
+    # out=Popen(["/usr/bin/stress", "--cpu", "1", "--timeout", "%s"%STRESSTIME])
+	cpustress(STRESSTIME)
+	return "Host: %s %ss stress.\n" % (host, STRESSTIME)
+
+@app.route("/cpu")
+def cpu():
+    # out=cpu_percent(interval=0.2)
+    out=getloadavg()[0]
+    return "Host: %s, CPU load: %s\n" %(host, out)
 
 @app.route('/')    
 def homepage():
