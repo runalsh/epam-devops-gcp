@@ -19,7 +19,7 @@ from flask import Flask,request,render_template
 import datetime
 from psutil import cpu_percent,getloadavg
 
-STRESSTIME=5
+STRESSTIME=30
 host=getenv('HOSTNAME')
         
 load_dotenv()
@@ -203,8 +203,6 @@ def showmeweather():
     connection.close()
     # return "indexhtml ready at"+current_time
     return render_template('shooooooooooooow.html', text=data)
-
-# TODO ДОБАВИТЬ STRESS в базу
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
