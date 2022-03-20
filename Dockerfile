@@ -5,16 +5,14 @@ FROM base as layer1
 RUN mkdir /app
 WORKDIR /app
 COPY requirements.txt /app
-COPY . /app
 RUN pip install --no-cache-dir --prefix=/app -r requirements.txt
 FROM base as layer2
 RUN mkdir /app
 WORKDIR /app
-COPY . /app
 ADD app.py /app/app.py
 FROM base
 RUN mkdir /app
-COPY . /app
+COPY .env /app
 COPY --from=layer1 /app /usr/local
 COPY --from=layer2 /app/app.py /app
 WORKDIR /app
