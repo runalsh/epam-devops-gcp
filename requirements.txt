@@ -3,4 +3,3 @@ psycopg2_binary
 requests
 python-dotenv
 psycopg2
-pystress
