@@ -1,14 +1,16 @@
-FROM python:3.6-alpine as base
+FROM python:3.7 as base
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 FROM base as layer1
 RUN mkdir /app
 WORKDIR /app
 COPY requirements.txt /app
+COPY . /app
 RUN pip install --no-cache-dir --prefix=/app -r requirements.txt
 FROM base as layer2
 RUN mkdir /app
 WORKDIR /app
+COPY . /app
 ADD app.py /app/app.py
 FROM base
 RUN mkdir /app
