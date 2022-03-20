@@ -9,6 +9,7 @@ import sys
 import json
 import requests
 import logging
+from time import time 
 # import pandas as pd
 # import sqlalchemy
 # from psycopg2 import Error
