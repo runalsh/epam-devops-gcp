@@ -5,6 +5,7 @@ FROM base as layer1
 RUN mkdir /app
 WORKDIR /app
 COPY requirements.txt /app
+COPY .env /app
 RUN pip3 install --upgrade pip
 RUN pip3 install --no-cache-dir --prefix=/app -r requirements.txt
 FROM base as layer2
