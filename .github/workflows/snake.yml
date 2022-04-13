@@ -149,8 +149,7 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Lint with pylint
       run: |
-        pylint --exit-zero $(ls -R | grep .py$ | xargs) ./back
-        pylint --exit-zero $(ls -R | grep .py$ | xargs) ./front
+        pylint --exit-zero $(ls -R | grep .py$ | xargs)
 
  # #======================== MAY BE GOSEC? ===================================
 
