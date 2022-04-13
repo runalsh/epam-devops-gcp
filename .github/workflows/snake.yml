@@ -33,8 +33,7 @@ jobs:
         # run: |
               # echo "$GCP_CREDENTIALS" > credentials.json
               # ls -la
-# # дикая дичь, подумать почему пропаганда не работает 
-# # TODO
+
       # - name: Setup Terraform
         # uses: hashicorp/setup-terraform@v1
 
