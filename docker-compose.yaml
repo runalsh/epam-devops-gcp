@@ -6,6 +6,8 @@ volumes:
   local_pgdata:
   pgadmin-data:    
 services:
+
+
   postgres:
     image: postgres:13
     container_name: postgres
@@ -25,11 +27,26 @@ services:
       - "5432:5432"
     networks:
       - bridge
-  web:
-    build: .
-    image: runalsh/epamapp:latest
+      
+     
+  front:
+    build: ./front/
+    image: runalsh/epamfront:latest
     ports:
-      - "8080:8080"
+      - "80:80"
+    depends_on:
+      - back
+    links:
+      - back
+    networks:
+      - bridge
+  
+  
+  back:
+    build: ./back/
+    image: runalsh/epamback:latest
+    # ports:
+      # - "8080:8080"
     depends_on:
       - postgres
     environment:
@@ -41,7 +58,8 @@ services:
       - postgres
     networks:
       - bridge
-  
+ 
+ 
   pgadmin:
     container_name: pgadmin
     image: dpage/pgadmin4:6.4
@@ -54,7 +72,7 @@ services:
     depends_on:
       - postgres
     ports:
-      - "5050:80"
+      - "5050:8888"
     restart: unless-stopped
     links:
       - postgres
