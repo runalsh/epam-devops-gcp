@@ -108,7 +108,7 @@ jobs:
  
     
   sonarcloud:
-    needs: bandit
+    # needs: bandit
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -120,8 +120,6 @@ jobs:
         fetch-depth: 0
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
-
-
 
 
   pylint:
