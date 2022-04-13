@@ -33,7 +33,8 @@ jobs:
         # run: |
               # echo "$GCP_CREDENTIALS" > credentials.json
               # ls -la
-
+# # дикая дичь, подумать почему пропаганда не работает 
+# # TODO
       # - name: Setup Terraform
         # uses: hashicorp/setup-terraform@v1
 
@@ -107,7 +108,7 @@ jobs:
  
     
   sonarcloud:
-    # needs: bandit
+    needs: pytest
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -125,7 +126,7 @@ jobs:
 
 
   pylint:
-    needs: bandit
+    needs: pytest
     runs-on: ubuntu-latest
     defaults:
       run:
