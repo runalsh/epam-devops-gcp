@@ -155,7 +155,7 @@ def showmeallweather():
     return "indexhtml ready at"+current_time
 
 @app.route('/stress/<int:seconds>')
-def stress(seconds):
+def stresssec(seconds):
     pystress(seconds, 1)
     return Response('shake me')
 
