@@ -3,6 +3,5 @@
 
 ABADONED TO HELL :C
 
-TODO: cloud cost eff , PRESENTATION
 
 
